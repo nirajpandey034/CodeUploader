@@ -1,0 +1,25 @@
+@media all {
+    .body {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+    }
+    
+    .head {
+        margin-left:auto;
+        margin-right:auto;
+    }
+    
+    .form {
+        padding:20px;
+    }
+
+    .textArea {
+        max-width: 100%;
+        color: black;
+        padding: 12px 20px;
+        border:  1px solid;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+}
