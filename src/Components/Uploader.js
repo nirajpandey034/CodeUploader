@@ -62,9 +62,7 @@ function Uploader() {
                     code_title:state.code_title,
                     code_url:state.code_url,
                     code_approach:state.code_approach,
-                    code_text:state.code_text,
-                    likes:0,
-                    dislikes:0
+                    code_text:state.code_text
                   }, function(error){
                       if(error)
                         alert("Code could not be saved." + error);
