@@ -5,6 +5,8 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField'
 
+import BackspaceIcon from '@material-ui/icons/Backspace';
+
 import '../MyCSS/myStyleSheet.css'
 
 const intialState = {
@@ -67,6 +69,15 @@ function Uploader() {
         {
             //alert('Kindly Fill all of the data correctly')
             //console.log("complete the data")
+        }
+        else if(document.getElementById('owner_name').value === '' ||
+        document.getElementById('owner_email').value === '' ||
+        document.getElementById('code_title').value === ''||
+        document.getElementById('code_url').value === ''||
+        document.getElementById('code_approach').value === ''||
+        document.getElementById('code_text').value === ''
+        ){
+                //do nothing
         }
             else {
                 firebase.database().ref('codeBase/' + state.code_title).set({
@@ -181,6 +192,22 @@ function Uploader() {
             alert('Some Error Occured, Please Try Again')
           });
     }
+
+    const clearData = () =>{
+                document.getElementById('owner_name').value = '';
+                document.getElementById('owner_email').value = '';
+                document.getElementById('code_title').value = '';
+                document.getElementById('code_url').value = '';
+                document.getElementById('code_approach').value = '';
+                document.getElementById('code_text').value = '';
+
+                setOwnerNameStatus('');
+                setOwnerEmailStatus('');
+                setCodeTitleStatus('');
+                setCodeUrlStatus('');
+                setCodeApproachStatus('');
+                setCodeTextStatus('');
+    }
     return (
         <div className='body'>
             <h2 className='head'>Put your and your code's details here...</h2>
@@ -275,7 +302,13 @@ function Uploader() {
 
                 <Button startIcon={<CloudUploadIcon />} variant='contained' color='secondary' type="submit" >Upload</Button>
                 &emsp;
-                <Button startIcon={<EditIcon />} variant='contained' color='secondary' onClick={fetchData}>Fetch Using Title</Button>
+                <Button startIcon={<EditIcon />} variant='contained' color='secondary' onClick={fetchData}>Fetch & Edit</Button>
+                <br />
+                <br />
+                <Button startIcon={<BackspaceIcon />} variant='contained' color='secondary' onClick={clearData}>Clear All</Button>
+                
+                    <p>**For editing, Give the exact Program Title and Press the "Fetch using Title" button then make changes and then press "Upload" button.</p>
+                
             </form>
         </div>
     )
