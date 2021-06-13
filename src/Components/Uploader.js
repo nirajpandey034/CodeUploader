@@ -35,6 +35,18 @@ const reducer = (state, action) =>{
             return state
     }
 }
+function getTime()
+{
+    const currentDate = new Date();
+
+    const currentDayOfMonth = currentDate.getDate();
+    const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
+    const currentYear = currentDate.getFullYear();
+
+    const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+
+    return dateString;
+}
 function Uploader() {
     //validator states
     const [owner_name_status, setOwnerNameStatus] = useState('')
@@ -53,7 +65,7 @@ function Uploader() {
         code_url_status !== 'Accepted' || code_approach_status !== 'Accepted' || code_text_status !== 'Accepted')
         {
             //alert('Kindly Fill all of the data correctly')
-            console.log("complete the data")
+            //console.log("complete the data")
         }
             else {
                 firebase.database().ref('codeBase/' + state.code_title).set({
@@ -62,7 +74,8 @@ function Uploader() {
                     code_title:state.code_title,
                     code_url:state.code_url,
                     code_approach:state.code_approach,
-                    code_text:state.code_text
+                    code_text:state.code_text,
+                    time:getTime()
                   }, function(error){
                       if(error)
                         alert("Code could not be saved." + error);
