@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField'
 
 import BackspaceIcon from '@material-ui/icons/Backspace';
 
+import Typography from '@material-ui/core/Typography';
+
 import '../MyCSS/myStyleSheet.css'
 
 const intialState = {
@@ -307,9 +309,12 @@ function Uploader() {
                 <br />
                 <Button startIcon={<BackspaceIcon />} variant='contained' color='secondary' onClick={clearData}>Clear All</Button>
                 
-                    <p>**For editing, Give the exact Program Title and Press the "Fetch using Title" button then make changes and then press "Upload" button.</p>
-                
             </form>
+
+            <Typography component='p'>
+                **For editing, Give the exact Program Title and Press the "Fetch using Title" button then make changes and then press "Upload" button.
+            </Typography>
+            
         </div>
     )
 }
