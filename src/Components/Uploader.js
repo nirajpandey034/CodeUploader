@@ -2,6 +2,7 @@ import React, {useReducer, useEffect, useState} from 'react'
 import firebase from '../firebase'
 import Button from '@material-ui/core/Button'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField'
 
 import '../MyCSS/myStyleSheet.css'
@@ -151,6 +152,35 @@ function Uploader() {
         else
             setCodeTextStatus('Accepted')
     }
+
+    //fetch data for editing
+    const fetchData = (event) =>{
+        let code_title = document.getElementById('code_title').value;
+        firebase.database().ref().child("codeBase").child(code_title).get().then((snapshot)=>{
+            if (snapshot.exists()) {
+                
+                document.getElementById('owner_name').value = snapshot.val().owner_name;
+                document.getElementById('owner_email').value = snapshot.val().owner_email;
+                document.getElementById('code_title').value = snapshot.val().code_title;
+                document.getElementById('code_url').value = snapshot.val().code_url;
+                document.getElementById('code_approach').value = snapshot.val().code_approach;
+                document.getElementById('code_text').value = snapshot.val().code_text;
+
+                setOwnerNameStatus('Accepted');
+                setOwnerEmailStatus('Accepted');
+                setCodeTitleStatus('Accepted');
+                setCodeUrlStatus('Accepted');
+                setCodeApproachStatus('Accepted');
+                setCodeTextStatus('Accepted');
+
+              } else {
+                alert('Program Title Should be exactly same, Try again')
+              }
+        })
+        .catch((error) => {
+            alert('Some Error Occured, Please Try Again')
+          });
+    }
     return (
         <div className='body'>
             <h2 className='head'>Put your and your code's details here...</h2>
@@ -159,6 +189,7 @@ function Uploader() {
                 <TextField
                 error={(owner_name_status==='Accepted') ? false : true}
                 name="owner_name" 
+                id="owner_name"
                 placeholder="Owner's Name"
                 onChange={validateNameChange}
                 />
@@ -172,6 +203,7 @@ function Uploader() {
                 <TextField 
                 error={(owner_email_status==='Accepted') ? false : true}
                 name="owners_email" 
+                id="owner_email"
                 placeholder="Owner's Email" 
                 onChange={validateEmailChange} 
                 />
@@ -185,6 +217,7 @@ function Uploader() {
                 <TextField 
                 error={(code_title_status==='Accepted') ? false : true}
                 name="code_title" 
+                id="code_title"
                 placeholder="Program Title"
                  onChange={validateCodeTitle} 
                 />
@@ -198,6 +231,7 @@ function Uploader() {
                 <TextField 
                 error={(code_url_status==='Accepted') ? false : true}
                 name="code_url" 
+                id="code_url"
                 placeholder="URL of the Program"
                 onChange={validateCodeUrl} 
                 />
@@ -212,6 +246,7 @@ function Uploader() {
                 <textarea 
                 className='textArea'
                 name="code_approach" 
+                id="code_approach"
                 placeholder="What's the approach ?" 
                 rows='10' cols='50'
                 onChange={validateCodeApproach} 
@@ -226,6 +261,7 @@ function Uploader() {
                 <textarea  
                 className='textArea'
                 name="code_text" 
+                id="code_text"
                 placeholder="Enter the Code here" 
                 rows='20' cols='60'
                 onChange={validateCodeText} 
@@ -238,6 +274,8 @@ function Uploader() {
                 <br />
 
                 <Button startIcon={<CloudUploadIcon />} variant='contained' color='secondary' type="submit" >Upload</Button>
+                &emsp;
+                <Button startIcon={<EditIcon />} variant='contained' color='secondary' onClick={fetchData}>Fetch Using Title</Button>
             </form>
         </div>
     )
