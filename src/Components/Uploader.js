@@ -1,5 +1,5 @@
 import React, {useReducer, useEffect, useState} from 'react'
-import firebase from '../firebase'
+import axios from 'axios'
 import Button from '@material-ui/core/Button'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import EditIcon from '@material-ui/icons/Edit';
@@ -68,36 +68,30 @@ function Uploader() {
     useEffect(()=>{
         if(owner_name_status !== 'Accepted' || owner_email_status !== 'Accepted' || code_title_status !=='Accepted' ||
         code_url_status !== 'Accepted' || code_approach_status !== 'Accepted' || code_text_status !== 'Accepted')
-        {
-            //alert('Kindly Fill all of the data correctly')
-            //console.log("complete the data")
-        }
+        {}
         else if(document.getElementById('owner_name').value === '' ||
         document.getElementById('owner_email').value === '' ||
         document.getElementById('code_title').value === ''||
         document.getElementById('code_url').value === ''||
         document.getElementById('code_approach').value === ''||
         document.getElementById('code_text').value === ''
-        ){
-                //do nothing
-        }
+        ){}
             else {
-                firebase.database().ref('codeBase/' + state.code_title).set({
-                    owner_name:state.owner_name,
-                    owner_email:state.owner_email,
-                    code_title:state.code_title,
-                    code_url:state.code_url,
-                    code_approach:state.code_approach,
-                    code_text:state.code_text,
-                    time:getTime()
-                  }, function(error){
-                      if(error)
-                        alert("Code could not be saved." + error);
-                      else
-                      {
-                        alert("Data saved successfully.");
-                        window.location.reload();
-                      }
+                axios.post('https://codebase034.herokuapp.com/upload/', {
+                    owner_name : state.owner_name,
+                    owner_email : state.owner_email,
+                    code_title : state.code_title,
+                    code_url : state.code_url,
+                    code_approach : state.code_approach,
+                    code_text : state.code_text,
+                    time : getTime()
+                  })
+                  .then(function (response) {
+                    alert("Data saved successfully.");
+                    window.location.reload();
+                  })
+                  .catch((error)=>{
+                    alert("Code could not be saved." + error);
                   });
             }
 
@@ -111,7 +105,6 @@ function Uploader() {
         code_url_status !== 'Accepted' || code_approach_status !== 'Accepted' || code_text_status !== 'Accepted')
         {
             alert('Kindly Fill all of the data correctly')
-            //console.log("complete the data")
         }
         else
             dispatch({type:'HANDLE_CHANGE', owner_name:event.target[0].value,
@@ -169,30 +162,32 @@ function Uploader() {
     //fetch data for editing
     const fetchData = (event) =>{
         let code_title = document.getElementById('code_title').value;
-        firebase.database().ref().child("codeBase").child(code_title).get().then((snapshot)=>{
-            if (snapshot.exists()) {
-                
-                document.getElementById('owner_name').value = snapshot.val().owner_name;
-                document.getElementById('owner_email').value = snapshot.val().owner_email;
-                document.getElementById('code_title').value = snapshot.val().code_title;
-                document.getElementById('code_url').value = snapshot.val().code_url;
-                document.getElementById('code_approach').value = snapshot.val().code_approach;
-                document.getElementById('code_text').value = snapshot.val().code_text;
-
-                setOwnerNameStatus('Accepted');
-                setOwnerEmailStatus('Accepted');
-                setCodeTitleStatus('Accepted');
-                setCodeUrlStatus('Accepted');
-                setCodeApproachStatus('Accepted');
-                setCodeTextStatus('Accepted');
-
-              } else {
-                alert('Program Title Should be exactly same, Try again')
-              }
+        axios.post('https://codebase034.herokuapp.com/fetch/', {
+            code_title: code_title
+        })
+        .then((res)=>{
+                if(res.data !== null){
+                    document.getElementById('owner_name').value = res.data.owner_name;
+                    document.getElementById('owner_email').value = res.data.owner_email;
+                    document.getElementById('code_title').value = res.data.code_title;
+                    document.getElementById('code_url').value = res.data.code_url;
+                    document.getElementById('code_approach').value = res.data.code_approach;
+                    document.getElementById('code_text').value = res.data.code_text;
+    
+                    setOwnerNameStatus('Accepted');
+                    setOwnerEmailStatus('Accepted');
+                    setCodeTitleStatus('Accepted');
+                    setCodeUrlStatus('Accepted');
+                    setCodeApproachStatus('Accepted');
+                    setCodeTextStatus('Accepted');
+                }
+                else{
+                    alert('Program Title Should be exactly same, Try again')
+                }
         })
         .catch((error) => {
             alert('Some Error Occured, Please Try Again')
-          });
+        });
     }
 
     const clearData = () =>{
@@ -222,9 +217,6 @@ function Uploader() {
                 placeholder="Owner's Name"
                 onChange={validateNameChange}
                 />
-                {/* <label htmlFor="owner_name" 
-                style={{marginLeft:'10px', color: (owner_name_status==='Accepted') ? 'green' : 'red'}}>
-                    {owner_name_status}</label> */}
                 </div>
                 <br />
 
@@ -236,9 +228,6 @@ function Uploader() {
                 placeholder="Owner's Email" 
                 onChange={validateEmailChange} 
                 />
-                {/* <label htmlFor="owner_email" 
-                style={{margin:'5px', color: (owner_email_status==='Accepted') ? 'green' : 'red'}}>
-                    {owner_email_status}</label> */}
                 </div>
                  <br />
 
@@ -250,9 +239,6 @@ function Uploader() {
                 placeholder="Program Title"
                  onChange={validateCodeTitle} 
                 />
-                {/* <label htmlFor="code_title" 
-                style={{margin:'5px', color: (code_title_status==='Accepted') ? 'green' : 'red'}}>
-                    {code_title_status}</label> */}
                 </div>
                 <br />
 
@@ -264,9 +250,6 @@ function Uploader() {
                 placeholder="URL of the Program"
                 onChange={validateCodeUrl} 
                 />
-                {/* <label htmlFor="code_url" 
-                style={{margin:'5px', color: (code_url_status==='Accepted') ? 'green' : 'red'}}>
-                    {code_url_status}</label> */}
                 </div>
 
                 <br />
