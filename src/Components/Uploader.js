@@ -287,7 +287,7 @@ function Uploader() {
 
                 <Button startIcon={<CloudUploadIcon />} variant='contained' color='secondary' type="submit" >Upload</Button>
                 &emsp;
-                <Button startIcon={<EditIcon />} variant='contained' color='secondary' onClick={fetchData}>Fetch & Edit</Button>
+                <Button startIcon={<EditIcon />} variant='contained' color='secondary' onClick={fetchData}>Fetch</Button>
                 <br />
                 <br />
                 <Button startIcon={<BackspaceIcon />} variant='contained' color='secondary' onClick={clearData}>Clear All</Button>
@@ -295,7 +295,7 @@ function Uploader() {
             </form>
 
             <Typography component='p'>
-                **For editing, Give the exact Program Title and Press the "Fetch using Title" button then make changes and then press "Upload" button.
+                **For editing, Give the exact Program Title and Press the "Fetch" button then make changes and then press "Upload" button.
             </Typography>
             
         </div>
